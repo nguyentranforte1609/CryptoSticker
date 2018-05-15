@@ -1,12 +1,11 @@
 {
   "name": "simple-react-axios-autoupdate",
   "version": "1.0.0",
-  "description":
-    "__ simple React app\n__ fetch data using Axios\n__ auto update",
+  "description": "__ simple React app\n__ fetch data using Axios\n__ auto update",
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
-    "axios": "0.18.0",
+    "axios": "^0.18.0",
     "react": "16.3.2",
     "react-dom": "16.3.2",
     "react-scripts": "1.1.4"

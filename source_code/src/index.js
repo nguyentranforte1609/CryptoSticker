@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 import "./App.css";
-import Tickers from "../components/Tickers.js";
+import Tickers from "./components/Tickers.js";
 
 class App extends React.Component {
   render() {

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { render } from "react-dom";
-import "./Tickers.css";
+import "../style/Tickers.css";
 import Cryptocurrency from "./Cryptocurrency";
 import axios from "axios";
 

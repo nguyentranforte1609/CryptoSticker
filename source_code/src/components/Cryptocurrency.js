@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { render } from "react-dom";
-import "./Cryptocurrency.css";
+import "../style/Cryptocurrency.css";
 
 class Cryptocurrency extends Component {
   render() {

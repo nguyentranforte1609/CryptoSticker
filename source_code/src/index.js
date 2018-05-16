@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "react-dom";
-import "./App.css";
+import "./style/App.css";
 import Tickers from "./components/Tickers.js";
 
 class App extends React.Component {

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../style/Tickers.css";
 import Cryptocurrency from "./Cryptocurrency";
-import axios from "axios";
+import { fetchCryptocurrencyData } from "../actions/fetchData";
 
 class Tickers extends Component {
   constructor(props) {
@@ -40,31 +40,25 @@ class Tickers extends Component {
   }
 
   componentDidMount() {
-    this.fetchCryptocurrencyData();
+    this.fetchData();
     this.interval = setInterval(
-      () => this.fetchCryptocurrencyData(),
+      () => this.fetchData(),
       60 * 1000
     );
   }
 
-  fetchCryptocurrencyData() {
-    axios
-      .get("https://api.coinmarketcap.com/v1/ticker/?limit=10")
-      .then(res => {
-        var wanted = ["bitcoin", "ethereum", "litecoin"];
-        var result = res.data.filter(currency => wanted.includes(currency.id));
-        this.setState({ data: result });
-      })
-      .catch(err => console.log(err));
+  fetchData() {
+    let result = dispatchEvent()
+    debugger
+    this.setState({ data: result });
   }
 
   render() {
-    var tickers = this.state.data.map(currency => (
-      <Cryptocurrency data={currency} key={currency.id} />
-    ));
     return (
       <div className="tickers-container">
-        <ul className="tickers">{tickers}</ul>
+        <ul className="tickers">{this.state.data.map(currency => (
+          <Cryptocurrency data={currency} key={currency.id} />
+        ))}</ul>
         <p>Information updated every minute courtesy of coinmarketcap.com</p>
       </div>
     );

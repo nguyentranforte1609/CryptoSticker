@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const limit = 10;
-const filterData = ["bitcoin", "ethereum", "litecoin"];
+const filterData = ["bitcoin", "ethereum", "litecoin","ripple","eos"];
 
 export async function fetchCryptocurrencyData() {
     await axios
@@ -18,5 +18,5 @@ export async function fetchCryptocurrencyData() {
 
 export const fecthData = () => ({
   type: "FETCH_DATA",
-  
+
 })

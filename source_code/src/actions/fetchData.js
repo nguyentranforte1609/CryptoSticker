@@ -15,3 +15,8 @@ export async function fetchCryptocurrencyData() {
           return [];
       });
   }
+
+export const fecthData = () => ({
+  type: "FETCH_DATA",
+  
+})

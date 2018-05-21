@@ -1,30 +1,5 @@
 export const limit = 30;
 export const defaultFilterData =  ["Bitcoin", "Ethereum", "Litecoin"];
-export const toogleStyle = {
-  block: {
-    maxWidth: 250,
-  },
-  toggle: {
-    marginBottom: 2,
-    marginTop: 5,
-  },
-  thumbOff: {
-    backgroundColor: '#ffcccc',
-  },
-  trackOff: {
-    backgroundColor: '#ff9d9d',
-  },
-  thumbSwitched: {
-    backgroundColor: 'red',
-  },
-  trackSwitched: {
-    backgroundColor: '#ff9d9d',
-  },
-  labelStyle: {
-    color: 'red',
-  },
-};
-
 export const availableFilter = [
     "Bitcoin",
     "Ethereum",
@@ -57,3 +32,24 @@ export const availableFilter = [
     "Verge",
     "Nano",
 ];
+
+export const styleCard = {
+  cryptocurrency: {
+    padding: "1rem 2rem 2rem",
+    margin: "1rem",
+    borderRadius: "0.5rem",
+    minWidth: "9rem",
+    border: "solid 1px rgba(255, 255, 255, 0.05)",
+    backgroundColor: "#434448",
+  },
+  cryptoName: {
+    fontSize: "1.25rem",
+    color: "lightgreen !important",
+  },
+  cryptoP: {
+    color: "#fff"
+  },
+  cryptoPrice: {
+    color: "aquamarine !important"
+  }
+}

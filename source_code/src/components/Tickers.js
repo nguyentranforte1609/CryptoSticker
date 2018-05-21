@@ -2,14 +2,17 @@
 import React, { Component } from "react";
 import axios from "axios";
 // UI Components
-import Drawer from 'material-ui/Drawer';
+import Drawer from '@material-ui/core/Drawer';
 import AppBar from "material-ui/AppBar";
 import RaisedButton from "material-ui/RaisedButton";
-import Toggle from "material-ui/Toggle";
-import Divider from 'material-ui/Divider';
+import Checkbox from "@material-ui/core/Checkbox";
+import Divider from '@material-ui/core/Divider';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
 // Local
 import Cryptocurrency from "./Cryptocurrency";
-import {limit, defaultFilterData, toogleStyle, availableFilter} from "../utils/constants";
+import {limit, defaultFilterData, availableFilter} from "../utils/constants";
 import "../style/Tickers.css";
 import "../style/Header.css";
 
@@ -20,21 +23,22 @@ class Tickers extends Component {
     this.state = {
       coins: [],
       openFilterPanel: false,
-      filters: []
+      filters: [],
+      allFilters : [],
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.interval = setInterval(
       () => this.refreshData(this.state.filters),
       60 * 1000
     );
-    let initialData = this.fetchData(defaultFilterData);
-    debugger
+    let initialData = await this.fetchData(defaultFilterData);
     this.setState({
-      coins : initialData
+      coins : initialData,
+      filters : defaultFilterData,
+      allFilters : availableFilter,
     })
-    debugger
   }
 
   handleToggle(){
@@ -58,47 +62,39 @@ class Tickers extends Component {
     return finalResult
   }
 
-  refreshData() {
-    let newData = this.fetchData(this.state.filters);
+  async refreshData() {
+    let newData = await this.fetchData(this.state.filters);
     this.setState({
-      coins: newData
+      coins: newData,
     })
   }
 
-  applyFilter(newFilters){
-    let newData = this.fetchData(newFilters);
-    this.setState({
-      openFilterPanel: !this.state.openFilterPanel,
-      coins : newData,
-      filters : newFilters
-    })
-  }
-
-  addRemoveFilter(coinName){
-    let newFilters = this.state.filters;
-    if (newFilters.indexOf(coinName) >= 0)
+  onCheck(event){
+    let filterValue = event.target.defaultValue;
+    let currentFilters = this.state.filters;
+    if (event.target.checked === true)
     {
-      newFilters= newFilters.splice(newFilters.indexOf(coinName), 1);
+      this.setState({
+        filters : currentFilters.indexOf(filterValue) === -1 ? currentFilters.concat(filterValue) : [currentFilters]
+      })
     }
     else
     {
-      newFilters = [...newFilters, coinName]
+      let indexOfFilter = currentFilters.indexOf(filterValue);
+      this.setState({
+        filters : currentFilters.splice(indexOfFilter, 1)
+      })
     }
-    debugger
-    this.setState({
-      filters : newFilters
-    })
   }
 
   render() {
-    var newFilters = defaultFilterData;
     return (
       <div>
         <AppBar 
           title={"CryptoTicker"}
           iconElementRight={
             <span>
-              <RaisedButton primary={true} label="Refresh" className="header-btn" onClick={this.refreshData.bind(this)}/>
+              <RaisedButton primary={true} label="Refresh" className="header-btn" onClick={() => {this.refreshData()}}/>
               <RaisedButton secondary={true} label="Filter" className="header-btn" onClick={this.handleToggle.bind(this)}/>
             </span>
           }
@@ -106,71 +102,46 @@ class Tickers extends Component {
           className="appbar-header"
         />
         <Drawer 
-          open={this.state.openFilterPanel} 
-          docked={false} 
-          width={200} 
-          openSecondary={true} 
-          //onRequestChange={this.applyFilter.bind(this)(newFilters)}
+          open={this.state.openFilterPanel}
+          anchor={'right'} 
+          docked={"false"}
+          onClose={() => {
+            this.setState({openFilterPanel: false});
+            this.refreshData();
+           } 
+          }
           >
           {
-            availableFilter.map( filter => {
+            this.state.allFilters.map( filter => {
               return (
                 <div>
                   <Divider />
-                  <Toggle 
-                    label={filter} 
-                    style={toogleStyle.toggle} 
-                    defaultToggled={defaultFilterData.indexOf(filter) >= 0 ? true : false}
-                    onToggle={
-                      newFilters.indexOf(filter) >= 0 ?
-                        newFilters= newFilters.splice(newFilters.indexOf(filter), 1) : 
-                        newFilters = [...newFilters, filter]
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        color="primary"
+                        value={filter}
+                        onChange={(value) => {this.onCheck(value)}}
+                        defaultChecked={this.state.filters.indexOf(filter)!==-1 ? true : false}
+                      />
                     }
+                    label={filter}
                   />
                 </div>
               );
             })
           }
         </Drawer>
-        <div className="tickers-container">
-          <ul className="tickers">{this.state.coins.map(currency => (
-            <Cryptocurrency data={currency} key={currency.id} />
-          ))}</ul>
-          <p>Information updated every minute courtesy of coinmarketcap.com</p>
-        </div>
+        <GridList className="container-fluid" cols={4}>
+          {this.state.coins.map(currency => (
+              <GridListTile cols={1} rows={2}>
+                  <Cryptocurrency data={currency} key={currency.id} />
+              </GridListTile>
+            ))}
+        </GridList>
       </div>
     );
   }
 }
 
 export default Tickers;
-
-// data: [
-//   {
-//     id: "bitcoin",
-//     name: "Bitcoin",
-//     symbol: "BTC",
-//     price_usd: "1",
-//     percent_change_1h: "0",
-//     percent_change_24h: "0",
-//     percent_change_7d: "0"
-//   },
-//   {
-//     id: "ethereum",
-//     name: "Ethereum",
-//     symbol: "ETH",
-//     price_usd: "1",
-//     percent_change_1h: "0",
-//     percent_change_24h: "0",
-//     percent_change_7d: "0"
-//   },
-//   {
-//     id: "litecoin",
-//     name: "Litecoin",
-//     symbol: "LTC",
-//     price_usd: "1",
-//     percent_change_1h: "0",
-//     percent_change_24h: "0",
-//     percent_change_7d: "0"
-//   }
-// ]

@@ -1,7 +1,7 @@
 {
-  "name": "simple-react-axios-autoupdate",
+  "name": "CryptoSticker",
   "version": "1.0.0",
-  "description": "__ simple React app\n__ fetch data using Axios\n__ auto update",
+  "description": "",
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
